@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/settingsmenu"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_settings"/>
+    <item android:id="@+id/refresh_menuitem" android:title="@string/menuentry_refresh"></item>
+    <item android:id="@+id/requesttoken_menuitem" android:title="@string/request_token"></item>
+
+</menu>

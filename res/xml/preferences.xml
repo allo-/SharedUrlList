@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="Settings">
+    <EditTextPreference android:title="Server-URL" android:key="pref_serverurl" android:inputType="textUri" />
+    <EditTextPreference android:title="Username" android:key="pref_username"  android:inputType="textNoSuggestions" />
+    <EditTextPreference android:title="Device-Name" android:key="pref_devicename" android:inputType="textNoSuggestions" />
+</PreferenceScreen>
