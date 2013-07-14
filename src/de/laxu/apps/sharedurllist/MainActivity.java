@@ -3,8 +3,6 @@ package de.laxu.apps.sharedurllist;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import de.laxu.apps.sharedurllist.R;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -74,8 +72,10 @@ public class MainActivity extends FragmentActivity {
 	public void onStart(){
 		super.onStart();
 		String errors = Util.getSettingsErrors(this);
-		if(errors != null)
+		if(Util.hasSettingsErrors(this))
 			errorMessageWithSettingsButton(errors);
+		else
+			hideMessage();
 	}
 	public void updateLists(){
 		hostURLList = new HashMap<String, ArrayList<UrlListEntry>>();
@@ -93,6 +93,7 @@ public class MainActivity extends FragmentActivity {
 		if(!Util.hasSettingsErrors(this)){
 			new requestTokenTast(this).execute();
 		}
+		
 	}
 
 	public void errorMessage(String errormessage){
@@ -121,12 +122,17 @@ public class MainActivity extends FragmentActivity {
 		messageTextView.setTextColor(Color.BLACK);
 		messageTextView.setText("");
 	}
-
+	
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu){
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		boolean settings_ok = Util.hasSettingsErrors(this);
+		return true;
+	}
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		
+		boolean settings_ok = !Util.hasSettingsErrors(this);
 		
 		MenuItem settingsMenu = menu.findItem(R.id.settingsmenu);
 		settingsMenu.setOnMenuItemClickListener(new OnSettingsMenuItemClickListener(this, this));
@@ -136,7 +142,7 @@ public class MainActivity extends FragmentActivity {
 		refreshMenuItem.setOnMenuItemClickListener(new OnRefreshMenuItemClickListener(this, this));
 		
 		MenuItem requestTokenMenuItem = menu.findItem(R.id.requesttoken_menuitem);
-		refreshMenuItem.setEnabled(settings_ok);
+		requestTokenMenuItem.setEnabled(settings_ok);
 		requestTokenMenuItem.setOnMenuItemClickListener(new OnRequestTokenMenuItemClickListener(this, this));
 		return true;
 	}

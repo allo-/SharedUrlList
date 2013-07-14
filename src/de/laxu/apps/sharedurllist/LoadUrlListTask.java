@@ -55,7 +55,7 @@ class LoadUrlListTask extends AsyncTask<Void, Void, String> {
 			JSONObject json = new JSONObject(json_input);
 			if (!json.get("status").equals("success")) {
 				String errormessage = json.getString("errormessage");
-				return "Server Error:" + errormessage;
+				return "Server Error: " + errormessage;
 			}
 			JSONArray hosts = (json.getJSONArray("hosts"));
 			for (int i = 0; i < hosts.length(); i++) {
@@ -79,7 +79,6 @@ class LoadUrlListTask extends AsyncTask<Void, Void, String> {
 		}catch (LoadException e) {
 			return e.getError();
 		}
-		
 	}
 
 	@Override

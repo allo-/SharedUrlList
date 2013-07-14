@@ -65,9 +65,9 @@ public abstract class Util  {
 		String devicename = sharedPrefs.getString("pref_devicename", "");
 		
 		return (
-			(serverURL.startsWith("https://") || serverURL.startsWith("http://"))
-			&& username.equals("")
-			&& devicename.equals("")
+			(!serverURL.startsWith("https://") && !serverURL.startsWith("http://"))
+			|| username.equals("")
+			|| devicename.equals("")
 		);
 	}
 	public static String getSettingsErrors(MainActivity mainActivity) {
