@@ -1,4 +1,4 @@
-package de.laxu.apps.commonurllist;
+package de.laxu.apps.sharedurllist;
 
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;

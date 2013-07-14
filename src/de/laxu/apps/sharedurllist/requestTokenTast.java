@@ -1,4 +1,4 @@
-package de.laxu.apps.commonurllist;
+package de.laxu.apps.sharedurllist;
 
 import org.json.JSONException;
 import org.json.JSONObject;

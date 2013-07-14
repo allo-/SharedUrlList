@@ -1,4 +1,4 @@
-package de.laxu.apps.commonurllist;
+package de.laxu.apps.sharedurllist;
 
 import java.io.BufferedReader;
 import java.io.IOException;

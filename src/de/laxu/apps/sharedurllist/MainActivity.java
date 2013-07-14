@@ -1,7 +1,9 @@
-package de.laxu.apps.commonurllist;
+package de.laxu.apps.sharedurllist;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import de.laxu.apps.sharedurllist.R;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
@@ -90,18 +93,24 @@ public class MainActivity extends FragmentActivity {
 	public void errorMessage(String errormessage){
 		TextView messageTextView =  (TextView) findViewById(R.id.messageTextView);
 		messageTextView.setText(errormessage);
-		messageTextView.setVisibility(TextView.VISIBLE);
+		messageTextView.setVisibility(View.VISIBLE);
 		messageTextView.setTextColor(Color.RED);
+	}
+	public void errorMessageWithSettingsButton(String errormessage){
+		Button settings_button = (Button) findViewById(R.id.settingsButton);
+		settings_button.setVisibility(View.VISIBLE);
 	}
 	public void infoMessage(String infomessage){
 		TextView messageTextView =  (TextView) findViewById(R.id.messageTextView);
 		messageTextView.setText(infomessage);
-		messageTextView.setVisibility(TextView.VISIBLE);
+		messageTextView.setVisibility(View.VISIBLE);
 		messageTextView.setTextColor(Color.BLACK);
 	}
 	public void hideMessage(){
 		TextView messageTextView =  (TextView) findViewById(R.id.messageTextView);
-		messageTextView.setVisibility(TextView.GONE);
+		messageTextView.setVisibility(View.GONE);
+		Button settings_button = (Button) findViewById(R.id.settingsButton);
+		settings_button.setVisibility(View.GONE);
 		// reset to defaults
 		messageTextView.setTextColor(Color.BLACK);
 		messageTextView.setText("");
@@ -194,11 +203,11 @@ class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
 		}else{*/
 			LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.urllist_entry, parent, false);
-			UrlListEntry entry = (UrlListEntry)arrayList.get(position);
+			UrlListEntry entry = arrayList.get(position);
 			String url = entry.getUrl();
 			String created = entry.getCreated();
-			((TextView) view.findViewById(R.id.urlListEntryLink)).setText((CharSequence)url);
-			((TextView) view.findViewById(R.id.urlListEntryCreatedDate)).setText((CharSequence)created);
+			((TextView) view.findViewById(R.id.urlListEntryLink)).setText(url);
+			((TextView) view.findViewById(R.id.urlListEntryCreatedDate)).setText(created);
 		//}
 		return view;
 	}	

@@ -1,4 +1,4 @@
-package de.laxu.apps.commonurllist;
+package de.laxu.apps.sharedurllist;
 
 import android.app.Activity;
 import android.content.Intent;

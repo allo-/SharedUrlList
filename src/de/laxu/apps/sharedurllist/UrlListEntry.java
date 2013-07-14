@@ -1,4 +1,4 @@
-package de.laxu.apps.commonurllist;
+package de.laxu.apps.sharedurllist;
 
 class UrlListEntry{
 	private String link;

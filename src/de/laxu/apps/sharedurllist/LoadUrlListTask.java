@@ -1,4 +1,4 @@
-package de.laxu.apps.commonurllist;
+package de.laxu.apps.sharedurllist;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 class LoadException extends Exception{

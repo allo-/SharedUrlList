@@ -1,5 +1,6 @@
-package de.laxu.apps.commonurllist;
+package de.laxu.apps.sharedurllist;
 
+import de.laxu.apps.sharedurllist.R;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.FragmentActivity;
