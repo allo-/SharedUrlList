@@ -73,7 +73,7 @@ public class MainActivity extends FragmentActivity {
 			// we cannot proceed with updating, because the user needs to accept the token first.
 		}else{
 			if(errors != null){
-				new LoadUrlTask(this).execute();
+				new LoadUrlListTask(this).execute();
 			}else{
 				errorMessage(errors);
 			}

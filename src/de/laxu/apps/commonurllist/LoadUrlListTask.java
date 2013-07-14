@@ -25,14 +25,14 @@ class LoadException extends Exception{
 	}
 }
 
-class LoadUrlTask extends AsyncTask<Void, Void, String> {
+class LoadUrlListTask extends AsyncTask<Void, Void, String> {
 
 	private final MainActivity mainActivity;
 	private String url; 
 	/**
 	 * @param mainActivity
 	 */
-	LoadUrlTask(MainActivity mainActivity) {
+	LoadUrlListTask(MainActivity mainActivity) {
 		this.mainActivity = mainActivity;
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mainActivity);
 		String serverurl = sharedPrefs.getString("pref_serverurl", "");

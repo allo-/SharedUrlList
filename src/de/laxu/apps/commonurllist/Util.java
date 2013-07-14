@@ -27,10 +27,12 @@ public abstract class Util  {
 						.getSystemService(Context.CONNECTIVITY_SERVICE);
 				NetworkInfo ni = cm.getActiveNetworkInfo();
 				if (ni != null && ni.isConnected()) {
+					if(url == null || url.equals("")){
+						throw new LoadException("no URL given.");
+					}
 					try {
 						HttpClient client = new DefaultHttpClient();
-						HttpResponse response = client.execute(new HttpGet(
-								(String) url));
+						HttpResponse response = client.execute(new HttpGet(url));
 						StatusLine statusLine = response.getStatusLine();
 						int statusCode = statusLine.getStatusCode();
 			
