@@ -58,30 +58,57 @@ public abstract class Util  {
 				}
 				return text;
 			}
+	public static boolean hasSettingsErrors(MainActivity mainActivity){
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+		String serverURL = sharedPrefs.getString("pref_serverurl", "");
+		String username = sharedPrefs.getString("pref_username", "");
+		String devicename = sharedPrefs.getString("pref_devicename", "");
+		
+		return (
+			(serverURL.startsWith("https://") || serverURL.startsWith("http://"))
+			&& username.equals("")
+			&& devicename.equals("")
+		);
+	}
 	public static String getSettingsErrors(MainActivity mainActivity) {
 		ArrayList<String> errorItems = new ArrayList<String>();
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-		if(sharedPrefs.getString("pref_serverurl", "").equals("")){
+		String errorString = "";
+		String serverURL = sharedPrefs.getString("pref_serverurl", "");
+		String username = sharedPrefs.getString("pref_username", "");
+		String devicename = sharedPrefs.getString("pref_devicename", "");
+		
+		if(serverURL.equals("")){
 			errorItems.add("Server-URL");
 		}
-		if(sharedPrefs.getString("pref_username", "").equals("")){
+		if(username.equals("")){
 			errorItems.add("Username");
 		}
-		if(sharedPrefs.getString("pref_devicename", "").equals("")){
-			errorItems.add("Devicename");
+		if(devicename.equals("")){
+			errorItems.add("device name");
 		}
-		return buildErrorMessage(errorItems);
-	}
-	private static String buildErrorMessage(ArrayList<String> errorItems){
-		String errorString="No ";
-		for(int i=0;i<errorItems.size(); i++){
-			if(i==0)
-				errorString += errorItems.get(i);
-			else
-				errorString += ", "+errorItems.get(i);
+		if(errorItems.size() >0)
+			errorString += "No " + buildCommaList(errorItems) +" set.";
+		
+		if(!serverURL.startsWith("https://") && !serverURL.startsWith("http://")){
+			if(!errorString.equals(""))
+				errorString += "\n";
+			errorString += "Server-URL does not start with \"https://\" or \"http://\".";
 		}
-		errorString += " set.";
 		return errorString;
+	}
+	private static String buildCommaList(ArrayList<String> errorItems){
+		String commaString="";
+		for(int i=0;i<errorItems.size(); i++){
+			if(i==0){ // first
+				commaString += errorItems.get(i);
+			}else if(i==errorItems.size()-1){ // last
+				commaString += " and " + errorItems.get(i);
+			}else{
+				commaString += ", "+errorItems.get(i);
+			}
+		}
+		return commaString;
 	}
 
 	public Util() {

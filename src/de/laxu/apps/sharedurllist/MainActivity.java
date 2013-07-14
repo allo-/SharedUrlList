@@ -64,32 +64,37 @@ public class MainActivity extends FragmentActivity {
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-
+		
+		Button settingsButton = (Button) findViewById(R.id.settingsButton);
+		settingsButton.setOnClickListener(new OnSettingsButtonClickListener(this));
 		updateLists();
+	}
+	
+	@Override
+	public void onStart(){
+		super.onStart();
+		String errors = Util.getSettingsErrors(this);
+		if(errors != null)
+			errorMessageWithSettingsButton(errors);
 	}
 	public void updateLists(){
 		hostURLList = new HashMap<String, ArrayList<UrlListEntry>>();
-		String errors = Util.getSettingsErrors(this);
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		if(sharedPrefs.getString("pref_token", "").equals("")){
-			requestToken();
-			// we cannot proceed with updating, because the user needs to accept the token first.
-		}else{
-			if(errors == null){
-				new LoadUrlListTask(this).execute();
+		if(!Util.hasSettingsErrors(this)){
+			SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+			if(sharedPrefs.getString("pref_token", "").equals("")){
+				requestToken();
+				//we cannot proceed with updating, because the user needs to accept the token first.
 			}else{
-				errorMessage(errors);
+				new LoadUrlListTask(this).execute();
 			}
 		}
 	}
 	public void requestToken(){
-		String errors=Util.getSettingsErrors(this);
-		if(errors == null){
+		if(!Util.hasSettingsErrors(this)){
 			new requestTokenTast(this).execute();
-		}else{
-			errorMessage(errors);
 		}
 	}
+
 	public void errorMessage(String errormessage){
 		TextView messageTextView =  (TextView) findViewById(R.id.messageTextView);
 		messageTextView.setText(errormessage);
@@ -99,6 +104,7 @@ public class MainActivity extends FragmentActivity {
 	public void errorMessageWithSettingsButton(String errormessage){
 		Button settings_button = (Button) findViewById(R.id.settingsButton);
 		settings_button.setVisibility(View.VISIBLE);
+		errorMessage(errormessage);
 	}
 	public void infoMessage(String infomessage){
 		TextView messageTextView =  (TextView) findViewById(R.id.messageTextView);
@@ -120,14 +126,17 @@ public class MainActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		
-		MenuItem refreshMenuItem = menu.findItem(R.id.refresh_menuitem);
-		refreshMenuItem.setOnMenuItemClickListener(new OnRefreshMenuItemClickListener(this, this));
+		boolean settings_ok = Util.hasSettingsErrors(this);
 		
 		MenuItem settingsMenu = menu.findItem(R.id.settingsmenu);
 		settingsMenu.setOnMenuItemClickListener(new OnSettingsMenuItemClickListener(this, this));
 		
+		MenuItem refreshMenuItem = menu.findItem(R.id.refresh_menuitem);
+		refreshMenuItem.setEnabled(settings_ok);
+		refreshMenuItem.setOnMenuItemClickListener(new OnRefreshMenuItemClickListener(this, this));
+		
 		MenuItem requestTokenMenuItem = menu.findItem(R.id.requesttoken_menuitem);
+		refreshMenuItem.setEnabled(settings_ok);
 		requestTokenMenuItem.setOnMenuItemClickListener(new OnRequestTokenMenuItemClickListener(this, this));
 		return true;
 	}
