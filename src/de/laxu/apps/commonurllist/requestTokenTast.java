@@ -2,13 +2,11 @@ package de.laxu.apps.commonurllist;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.JsonReader;
 import android.util.Log;
 
 class requestTokenTast extends AsyncTask<Void, Void, String>{

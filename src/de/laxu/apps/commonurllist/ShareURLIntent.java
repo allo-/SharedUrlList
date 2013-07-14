@@ -1,11 +1,8 @@
 package de.laxu.apps.commonurllist;
 
 import android.app.Activity;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
 public class ShareURLIntent extends Activity {
 

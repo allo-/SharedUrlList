@@ -1,11 +1,6 @@
 package de.laxu.apps.commonurllist;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 
