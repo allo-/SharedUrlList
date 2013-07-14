@@ -68,11 +68,11 @@ public class MainActivity extends FragmentActivity {
 		hostURLList = new HashMap<String, ArrayList<UrlListEntry>>();
 		String errors = Util.getSettingsErrors(this);
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		if(sharedPrefs.getString("pref_serverurl", "").equals("")){
+		if(sharedPrefs.getString("pref_token", "").equals("")){
 			requestToken();
 			// we cannot proceed with updating, because the user needs to accept the token first.
 		}else{
-			if(errors != null){
+			if(errors == null){
 				new LoadUrlListTask(this).execute();
 			}else{
 				errorMessage(errors);
@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	public void requestToken(){
 		String errors=Util.getSettingsErrors(this);
-		if(errors != null){
+		if(errors == null){
 			new requestTokenTast(this).execute();
 		}else{
 			errorMessage(errors);

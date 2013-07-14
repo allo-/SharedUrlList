@@ -38,7 +38,6 @@ class LoadUrlListTask extends AsyncTask<Void, Void, String> {
 		String serverurl = sharedPrefs.getString("pref_serverurl", "");
 		String token = sharedPrefs.getString("pref_token", "");
 		this.url=serverurl + "?api=true&token="+Uri.encode(token);
-		Log.i("tokenURL", this.url);
 	}
 
 	private String oldHostname;
