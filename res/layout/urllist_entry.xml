@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/urlist_entry_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:longClickable="true"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/urlListEntryPadding"
-    android:paddingTop="@dimen/urlListEntryPadding"
     android:paddingLeft="@dimen/urlListEntryHorizontalPadding"
     android:paddingRight="@dimen/urlListEntryHorizontalPadding"
-    android:longClickable="true"
-    android:clipToPadding="false"
-    android:orientation="vertical" >
+    android:paddingTop="@dimen/urlListEntryPadding" >
 
 <TextView
     android:id="@+id/urlListEntryLink"
@@ -16,7 +17,7 @@
     android:layout_height="wrap_content"
     android:autoLink="web"
     android:linksClickable="true"
-    android:textIsSelectable="true"
+    android:textIsSelectable="false"
     android:textSize="@dimen/urlListEntryLink" >
 
 </TextView>

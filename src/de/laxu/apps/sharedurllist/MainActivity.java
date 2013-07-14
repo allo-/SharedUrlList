@@ -3,6 +3,9 @@ package de.laxu.apps.sharedurllist;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,14 +19,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
+import android.text.Layout;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
@@ -51,7 +60,6 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//dummy data, will be overwritten onload
 		hostnames=new ArrayList<String>();
 		hostURLList = new HashMap<String, ArrayList<UrlListEntry>>();
 		
@@ -200,11 +208,10 @@ public class MainActivity extends FragmentActivity {
 		 * The fragment argument representing the section number for this
 		 * fragment.
 		 */
-
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState){
 			super.onActivityCreated(savedInstanceState);
-			UrlArrayAdapter arrayAdapter = new UrlArrayAdapter(getActivity(), R.layout.urllist_entry, new ArrayList<UrlListEntry>());
+			UrlArrayAdapter arrayAdapter = new UrlArrayAdapter(getActivity(), this, R.layout.urllist_entry, new ArrayList<UrlListEntry>());
 			setListAdapter(arrayAdapter);
 			int position = ((Integer) this.getArguments().get("position")).intValue();
 			String hostname = hostnames.get(position);
@@ -217,15 +224,47 @@ public class MainActivity extends FragmentActivity {
 				arrayAdapter.notifyDataSetChanged();
 			}
 		}
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			return super.onCreateView(inflater, container, savedInstanceState);
+		}
+		@Override
+		public void onCreateContextMenu(ContextMenu menu, View v,
+		    ContextMenuInfo menuInfo) {
+			Log.i("contextmenu", v.toString());
+			if (v.getId()==R.id.urlist_entry_layout) {
+				MenuItem copy = menu.add("copy");
+				ClipboardManager clipboard = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+				copy.setOnMenuItemClickListener(new OnCopyMenuItemClickListener(v, clipboard));
+				MenuItem delete = menu.add("delete");
+			}
+		}
+	}
+}
+class OnCopyMenuItemClickListener implements OnMenuItemClickListener{
+		private View view;
+		private ClipboardManager clipboard;
+		public OnCopyMenuItemClickListener(View v, ClipboardManager clipboard){
+			this.view = v;
+			this.clipboard = clipboard;
+		}
+	@Override
+	public boolean onMenuItemClick(MenuItem item) {
+		ClipData clip = ClipData.newPlainText("url", ((TextView)this.view.findViewById(R.id.urlListEntryLink)).getText());
+		clipboard.setPrimaryClip(clip);
+		return true;
 	}
 }
 class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
 	Context context;
 	ArrayList<UrlListEntry> arrayList;
-	public UrlArrayAdapter(Context context, int layoutId, ArrayList<UrlListEntry> arrayList){
+	ListFragment fragment;
+	public UrlArrayAdapter(Context context, ListFragment fragment, int layoutId, ArrayList<UrlListEntry> arrayList){
 		super(context, layoutId, arrayList);
 		this.arrayList = arrayList;
 		this.context = context;
+		this.fragment = fragment;
 	}
 	
 	@Override
@@ -241,7 +280,9 @@ class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
 			String created = entry.getCreated();
 			((TextView) view.findViewById(R.id.urlListEntryLink)).setText(url);
 			((TextView) view.findViewById(R.id.urlListEntryCreatedDate)).setText(created);
+			Activity activity = (Activity)context;
+			fragment.registerForContextMenu(view);
 		}
 		return view;
-	}	
+	}
 }
