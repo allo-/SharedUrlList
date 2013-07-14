@@ -2,25 +2,18 @@ package de.laxu.apps.commonurllist;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,8 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
@@ -49,8 +40,7 @@ public class MainActivity extends FragmentActivity {
 	 */
 	ViewPager mViewPager;
 	
-	static HashMap<String, ArrayList<String>> hostURLList;
-	private static ArrayList<ListView> urlLists;
+	static HashMap<String, ArrayList<UrlListEntry>> hostURLList;
 	static ArrayList<String> hostnames;
 	
 
@@ -60,7 +50,7 @@ public class MainActivity extends FragmentActivity {
 		
 		//dummy data, will be overwritten onload
 		hostnames=new ArrayList<String>();
-		hostURLList = new HashMap<String, ArrayList<String>>();
+		hostURLList = new HashMap<String, ArrayList<UrlListEntry>>();
 		
 		setContentView(R.layout.activity_main);
 
@@ -75,7 +65,7 @@ public class MainActivity extends FragmentActivity {
 		updateLists();
 	}
 	public void updateLists(){
-		hostURLList = new HashMap<String, ArrayList<String>>();
+		hostURLList = new HashMap<String, ArrayList<UrlListEntry>>();
 		String errors = Util.getSettingsErrors(this);
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		if(sharedPrefs.getString("pref_serverurl", "").equals("")){
@@ -163,48 +153,53 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	public static class UrlTab extends Fragment {
+	public static class UrlTab extends ListFragment {
 		/**
 		 * The fragment argument representing the section number for this
 		 * fragment.
 		 */
-		private View rootView;
-
-		public UrlTab() {
-
-		}
 
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			rootView = inflater.inflate(R.layout.fragment_urllist_for_one_host,
-					container, false);
-			if(urlLists == null){
-				urlLists = new ArrayList<ListView>();
-			}
-			ListView urlList = (ListView) rootView.findViewById(R.id.urllist);
-			urlLists.add(urlList);
-			UrlArrayAdapter arrayAdapter = new UrlArrayAdapter(rootView.getContext(), R.layout.urllist_entry, new ArrayList<String>());
-			urlList.setAdapter(arrayAdapter);
+		public void onActivityCreated(Bundle savedInstanceState){
+			super.onActivityCreated(savedInstanceState);
+			UrlArrayAdapter arrayAdapter = new UrlArrayAdapter(getActivity(), R.layout.urllist_entry, new ArrayList<UrlListEntry>());
+			setListAdapter(arrayAdapter);
 			int position = ((Integer) this.getArguments().get("position")).intValue();
 			String hostname = hostnames.get(position);
 			assert hostURLList != null;
 			assert hostname != null;
 			assert arrayAdapter != null;
-			ArrayList<String> list = hostURLList.get(hostname);
+			ArrayList<UrlListEntry> list = hostURLList.get(hostname);
 			if(list != null){
 				arrayAdapter.addAll(list);
 				arrayAdapter.notifyDataSetChanged();
 			}
-			return rootView;
 		}
-
 	}
 }
-class UrlArrayAdapter extends ArrayAdapter<String>{
-	public UrlArrayAdapter(Context context, int layoutId, ArrayList<String> arrayList){
+class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
+	Context context;
+	ArrayList<UrlListEntry> arrayList;
+	public UrlArrayAdapter(Context context, int layoutId, ArrayList<UrlListEntry> arrayList){
 		super(context, layoutId, arrayList);
+		this.arrayList = arrayList;
+		this.context = context;
 	}
-
 	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent){
+		View view;
+		/*if(convertView != null){
+			view = convertView;
+		}else{*/
+			LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			view = inflater.inflate(R.layout.urllist_entry, parent, false);
+			UrlListEntry entry = (UrlListEntry)arrayList.get(position);
+			String url = entry.getUrl();
+			String created = entry.getCreated();
+			((TextView) view.findViewById(R.id.urlListEntryLink)).setText((CharSequence)url);
+			((TextView) view.findViewById(R.id.urlListEntryCreatedDate)).setText((CharSequence)created);
+		//}
+		return view;
+	}	
 }

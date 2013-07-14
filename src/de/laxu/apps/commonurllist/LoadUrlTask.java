@@ -65,9 +65,12 @@ class LoadUrlTask extends AsyncTask<Void, Void, String> {
 				String hostname = host.getString("hostname");
 				MainActivity.hostnames.add(hostname);
 				JSONArray json_urls = host.getJSONArray("urls");
-				ArrayList<String> url_list = new ArrayList<String>();
+				ArrayList<UrlListEntry> url_list = new ArrayList<UrlListEntry>();
 				for (int j = 0; j < json_urls.length(); j++) {
-					url_list.add((String) json_urls.getString(j));
+					JSONObject json_url = (JSONObject) json_urls.get(j);
+					String link = json_url.getString("link");
+					String created = json_url.getString("created");
+					url_list.add(new UrlListEntry(link, created));
 				}
 				MainActivity.hostURLList.put(hostname, url_list);
 			}

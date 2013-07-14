@@ -6,4 +6,8 @@
     <string name="urllistentry_onclick">urllistentry_onclick</string>
     <string name="menuentry_refresh">Refresh</string>
     <string name="request_token">Request Token</string>
+    <string name="title_activity_share_url">shared URL-List</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="text_mimetype">text/*</string>
+
 </resources>

@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/urlListEntry"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:longClickable="true"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:paddingBottom="@dimen/urlListEntryPadding"
     android:paddingTop="@dimen/urlListEntryPadding"
+    android:paddingLeft="@dimen/urlListEntryHorizontalPadding"
+    android:paddingRight="@dimen/urlListEntryHorizontalPadding"
+    android:longClickable="true"
+    android:clipToPadding="false"
+    android:orientation="vertical" >
+
+<TextView
+    android:id="@+id/urlListEntryLink"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:autoLink="web"
-    android:textSize="@dimen/urlListEntry" >
+    android:textIsSelectable="false"
+    android:textSize="@dimen/urlListEntryLink" >
 
 </TextView>
+
+<TextView
+    android:id="@+id/urlListEntryCreatedDate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text=""
+    android:textColor="@color/created_date"
+    android:textIsSelectable="false"
+    android:textSize="@dimen/urlListEntryCreatedDate" />
+
+</LinearLayout>
+
