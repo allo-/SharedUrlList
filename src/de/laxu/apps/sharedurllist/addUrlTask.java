@@ -8,49 +8,49 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
-class requestTokenTast extends AsyncTask<Void, Void, String>{
-	private MainActivity mainActivity;
+class addUrlTask extends AsyncTask<Void, Void, String>{
+	private ShareURLFragment activity;
+	private String requesturl;
 	private String url;
 	private SharedPreferences sharedPrefs;
 	
-	public requestTokenTast(MainActivity mainActivity){
-		this.mainActivity = mainActivity;
-		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+	public addUrlTask(ShareURLFragment activity, String url){
+		this.activity = activity;
+		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 		String serverurl = sharedPrefs.getString("pref_serverurl", "");
-		String username = sharedPrefs.getString("pref_username", "");
-		String device = sharedPrefs.getString("pref_devicename", "");
-		this.url=serverurl + "?api=true&tokenrequest=true&user="+Uri.encode(username)+"&device="+Uri.encode(device);
+		String token = sharedPrefs.getString("pref_token", "");
+		this.url = url;
+		this.requesturl=serverurl + "?api=true&token="+Uri.encode(token)+"&add=true&url="+Uri.encode(url);
 	}
 	@Override
 	protected void onPreExecute() {
-		this.mainActivity.infoMessage("requesting token ...");
+		
 	}
 	@Override
 	protected String doInBackground(Void... params) {
 		String json_input="";
 		try {
-			json_input = Util.loadFromURL(this.mainActivity, this.url);
+			json_input = Util.loadFromURL(this.activity, this.requesturl);
 		} catch (LoadException e) {
 			return e.getError();
 		}
 		try {
 			JSONObject json = new JSONObject(json_input);
 			if(json.getString("status").equals("success")){
-				sharedPrefs.edit().putString("pref_token", json.getString("token")).commit();
+				return null;
 			}else{
 				return json.getString("errormessage");
 			}
 		} catch (JSONException e) {
 			return "JSON error";
 		}
-		return null;
 	}
 	@Override
 	protected void onPostExecute(String errors) {
 		if(errors == null){
-			mainActivity.infoMessage("token created. You need to accept it in the webinterface now.");
+			this.activity.successMessage(this.url);
 		}else{
-			mainActivity.errorMessage(errors);
+			this.activity.errorMessage(url, errors);
 			
 		}
 		super.onPostExecute(errors);

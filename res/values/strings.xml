@@ -8,5 +8,7 @@
     <string name="request_token">Request Token</string>
     <string name="title_activity_share_url">shared URL-List</string>
     <string name="text_mimetype">text/*</string>
+    <string name="menuentry_addurl">add URL</string>
+    <string name="title_add_url_dialog">add Url</string>
 
 </resources>

@@ -30,7 +30,7 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name="de.laxu.apps.sharedurllist.ShareURLIntent"
+            android:name="de.laxu.apps.sharedurllist.ShareURLFragment"
             android:label="@string/title_activity_share_url" android:theme="@android:style/Theme.NoDisplay">
             <intent-filter android:label="Shared URL-List">
                 <action android:name="android.intent.action.SEND"/>
@@ -38,6 +38,7 @@
                 <data android:mimeType="@string/text_mimetype"/>
             </intent-filter>
         </activity>
+        <activity android:name="de.laxu.apps.sharedurllist.AddUrlDialog" android:label="@string/title_add_url_dialog" android:theme="@android:style/Theme.NoDisplay"></activity>
     </application>
 
 </manifest>

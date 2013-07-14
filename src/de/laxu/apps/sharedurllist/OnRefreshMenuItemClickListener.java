@@ -4,12 +4,8 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 
 class OnRefreshMenuItemClickListener implements OnMenuItemClickListener{
-	/**
-	 * 
-	 */
 	private final MainActivity mainActivity;
-	public OnRefreshMenuItemClickListener(MainActivity mainActivity, MainActivity activity){
-		super();
+	public OnRefreshMenuItemClickListener(MainActivity mainActivity){
 		this.mainActivity = mainActivity;
 	}
 	@Override

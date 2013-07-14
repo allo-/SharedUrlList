@@ -12,6 +12,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -20,10 +21,10 @@ import android.preference.PreferenceManager;
 
 public abstract class Util  {
 
-	public static String loadFromURL(MainActivity mainActivity, String url)
+	public static String loadFromURL(Activity activity, String url)
 			throws LoadException {
 				String text="";
-				ConnectivityManager cm = (ConnectivityManager) mainActivity
+				ConnectivityManager cm = (ConnectivityManager) activity
 						.getSystemService(Context.CONNECTIVITY_SERVICE);
 				NetworkInfo ni = cm.getActiveNetworkInfo();
 				if (ni != null && ni.isConnected()) {

@@ -1,15 +1,11 @@
 package de.laxu.apps.sharedurllist;
 
-import android.app.Activity;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 
 class  OnRequestTokenMenuItemClickListener implements OnMenuItemClickListener{
-	/**
-	 * 
-	 */
 	private final MainActivity mainActivity;
-	public OnRequestTokenMenuItemClickListener(MainActivity mainActivity, Activity activity){
+	public OnRequestTokenMenuItemClickListener(MainActivity mainActivity){
 		this.mainActivity = mainActivity;
 	}
 	

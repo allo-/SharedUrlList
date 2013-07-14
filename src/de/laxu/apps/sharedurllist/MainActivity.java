@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -135,16 +137,32 @@ public class MainActivity extends FragmentActivity {
 		boolean settings_ok = !Util.hasSettingsErrors(this);
 		
 		MenuItem settingsMenu = menu.findItem(R.id.settingsmenu);
-		settingsMenu.setOnMenuItemClickListener(new OnSettingsMenuItemClickListener(this, this));
+		settingsMenu.setOnMenuItemClickListener(new OnSettingsMenuItemClickListener(this));
 		
 		MenuItem refreshMenuItem = menu.findItem(R.id.refresh_menuitem);
 		refreshMenuItem.setEnabled(settings_ok);
-		refreshMenuItem.setOnMenuItemClickListener(new OnRefreshMenuItemClickListener(this, this));
+		refreshMenuItem.setOnMenuItemClickListener(new OnRefreshMenuItemClickListener(this));
 		
 		MenuItem requestTokenMenuItem = menu.findItem(R.id.requesttoken_menuitem);
 		requestTokenMenuItem.setEnabled(settings_ok);
-		requestTokenMenuItem.setOnMenuItemClickListener(new OnRequestTokenMenuItemClickListener(this, this));
+		requestTokenMenuItem.setOnMenuItemClickListener(new OnRequestTokenMenuItemClickListener(this));
+		
+		MenuItem addUrlMenuItem = menu.findItem(R.id.addurl_menuitem);
+		addUrlMenuItem.setEnabled(settings_ok);
+		addUrlMenuItem.setOnMenuItemClickListener(new OnAddUrlMenuItemClickListener(this));
 		return true;
+	}
+	class OnAddUrlMenuItemClickListener implements OnMenuItemClickListener{
+		private final MainActivity mainActivity;
+		public OnAddUrlMenuItemClickListener(MainActivity mainActivity){
+			this.mainActivity = mainActivity;
+		}
+		@Override
+		public boolean onMenuItemClick(MenuItem item) {
+			mainActivity.startActivity(new Intent(mainActivity, AddUrlDialog.class));
+			return true;
+		}
+		
 	}
 
 	/**
@@ -213,9 +231,9 @@ class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
 		View view;
-		/*if(convertView != null){
+		if(convertView != null){
 			view = convertView;
-		}else{*/
+		}else{
 			LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.urllist_entry, parent, false);
 			UrlListEntry entry = arrayList.get(position);
@@ -223,7 +241,7 @@ class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
 			String created = entry.getCreated();
 			((TextView) view.findViewById(R.id.urlListEntryLink)).setText(url);
 			((TextView) view.findViewById(R.id.urlListEntryCreatedDate)).setText(created);
-		//}
+		}
 		return view;
 	}	
 }
