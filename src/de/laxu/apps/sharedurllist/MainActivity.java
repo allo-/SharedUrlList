@@ -34,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -253,6 +254,7 @@ class OnCopyMenuItemClickListener implements OnMenuItemClickListener{
 	public boolean onMenuItemClick(MenuItem item) {
 		ClipData clip = ClipData.newPlainText("url", ((TextView)this.view.findViewById(R.id.urlListEntryLink)).getText());
 		clipboard.setPrimaryClip(clip);
+		Toast.makeText(view.getContext(), "URL copied to clipboard.", Toast.LENGTH_SHORT).show();
 		return true;
 	}
 }
