@@ -34,11 +34,8 @@ public class ShareURLFragment extends FragmentActivity {
 	public void createNotification(String title, String text, int icon, boolean progress){
 		notificationManager = ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE));
 		notificationManager.cancelAll();
-		Intent intent = new Intent(this, MainActivity.class);
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-		stackBuilder.addParentStack(MainActivity.class);
-		stackBuilder.addNextIntent(intent);
-		PendingIntent pIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+		Intent newIntent = new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		PendingIntent pIntent = PendingIntent.getActivity(this, 0, newIntent, 0);
 		Builder builder = new NotificationCompat.Builder(this);
 		builder
 		.setSmallIcon(icon)
@@ -46,13 +43,13 @@ public class ShareURLFragment extends FragmentActivity {
 		.setContentText(text)
 		.setAutoCancel(true)
 		.setTicker(title+": "+text)
-		.setContentIntent(pIntent);
+		.setContentIntent(pIntent)
+		;
 		if(progress){
 			builder.setProgress(1, 0, true);
 		}
 		Notification notification = builder.build();
 		notificationManager.notify(NOTIFICATION_ID, notification);
-		
 	}
 
 	public void removeNotification(){
