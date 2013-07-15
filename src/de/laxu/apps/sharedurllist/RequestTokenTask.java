@@ -8,12 +8,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
-class requestTokenTast extends AsyncTask<Void, Void, String>{
+class RequestTokenTask extends AsyncTask<Void, Void, String>{
 	private MainActivity mainActivity;
 	private String url;
 	private SharedPreferences sharedPrefs;
 	
-	public requestTokenTast(MainActivity mainActivity){
+	public RequestTokenTask(MainActivity mainActivity){
 		this.mainActivity = mainActivity;
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mainActivity);
 		String serverurl = sharedPrefs.getString("pref_serverurl", "");

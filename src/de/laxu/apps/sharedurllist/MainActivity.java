@@ -3,7 +3,6 @@ package de.laxu.apps.sharedurllist;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -99,7 +98,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	public void requestToken(){
 		if(!Util.hasSettingsErrors(this)){
-			new requestTokenTast(this).execute();
+			new RequestTokenTask(this).execute();
 		}
 		
 	}
