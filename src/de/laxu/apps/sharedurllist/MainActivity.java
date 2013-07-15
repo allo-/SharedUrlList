@@ -19,7 +19,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
-import android.text.Layout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -28,11 +27,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -282,7 +279,6 @@ class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
 			String created = entry.getCreated();
 			((TextView) view.findViewById(R.id.urlListEntryLink)).setText(url);
 			((TextView) view.findViewById(R.id.urlListEntryCreatedDate)).setText(created);
-			Activity activity = (Activity)context;
 			fragment.registerForContextMenu(view);
 		}
 		return view;

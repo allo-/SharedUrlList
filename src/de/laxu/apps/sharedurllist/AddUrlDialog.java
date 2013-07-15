@@ -33,9 +33,10 @@ public class AddUrlDialog extends FragmentActivity {
 			builder.setPositiveButton("Add", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+					getActivity().finish();
 					Intent intent = new Intent(getActivity(), ShareURLFragment.class).setAction(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, input.getText().toString());
 					getActivity().startActivity(intent);
-					getActivity().finish();
+					
 				}
 			});
 			return builder.create();
