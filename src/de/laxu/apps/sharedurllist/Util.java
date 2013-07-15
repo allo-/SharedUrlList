@@ -13,11 +13,17 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.Builder;
 
 public abstract class Util  {
 
@@ -111,7 +117,32 @@ public abstract class Util  {
 		}
 		return commaString;
 	}
+	private static final int NOTIFICATION_ID = 1;
+	public static void createNotification(Activity activity, String title, String text, int icon, boolean progress){
+		NotificationManager notificationManager = ((NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE));
+		notificationManager.cancelAll();
+		Intent newIntent = new Intent(activity.getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		PendingIntent pIntent = PendingIntent.getActivity(activity, 0, newIntent, 0);
+		Builder builder = new NotificationCompat.Builder(activity);
+		builder
+		.setSmallIcon(icon)
+		.setContentTitle(title)
+		.setContentText(text)
+		.setAutoCancel(true)
+		.setTicker(title+": "+text)
+		.setContentIntent(pIntent)
+		;
+		if(progress){
+			builder.setProgress(1, 0, true);
+		}
+		Notification notification = builder.build();
+		notificationManager.notify(NOTIFICATION_ID, notification);
+	}
 
+	public static void removeNotifications(Activity activity){
+		((NotificationManager)activity.getSystemService(Context.NOTIFICATION_SERVICE))
+		.cancel(NOTIFICATION_ID);
+	}
 	public Util() {
 		super();
 	}
