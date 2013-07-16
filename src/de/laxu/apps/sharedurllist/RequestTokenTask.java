@@ -48,7 +48,7 @@ class RequestTokenTask extends AsyncTask<Void, Void, String>{
 	@Override
 	protected void onPostExecute(String errors) {
 		if(errors == null){
-			mainActivity.infoMessage("token created. You need to accept it in the webinterface now.");
+			mainActivity.infoMessage("token created.");
 		}else{
 			mainActivity.errorMessage(errors);
 			
