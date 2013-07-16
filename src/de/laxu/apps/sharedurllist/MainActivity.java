@@ -3,27 +3,19 @@ package de.laxu.apps.sharedurllist;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import de.laxu.apps.sharedurllist.listeners.OnAddUrlMenuItemClickListener;
-import de.laxu.apps.sharedurllist.listeners.OnCopyMenuItemClickListener;
-import de.laxu.apps.sharedurllist.listeners.OnRefreshMenuItemClickListener;
-import de.laxu.apps.sharedurllist.listeners.OnRequestTokenMenuItemClickListener;
-import de.laxu.apps.sharedurllist.listeners.OnSettingsButtonClickListener;
-import de.laxu.apps.sharedurllist.listeners.OnSettingsMenuItemClickListener;
-
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.util.SparseArray;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -34,6 +26,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import de.laxu.apps.sharedurllist.listeners.OnAddUrlMenuItemClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnCopyMenuItemClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnDeleteMenuItemClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnRefreshMenuItemClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnRequestTokenMenuItemClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnSettingsButtonClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnSettingsMenuItemClickListener;
 
 public class MainActivity extends FragmentActivity {
 
@@ -54,7 +53,7 @@ public class MainActivity extends FragmentActivity {
 	
 	static HashMap<String, ArrayList<UrlListEntry>> hostURLList;
 	static ArrayList<String> hostnames;
-	
+	static SparseArray<UrlTab> urlTabs;	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +61,7 @@ public class MainActivity extends FragmentActivity {
 		
 		hostnames=new ArrayList<String>();
 		hostURLList = new HashMap<String, ArrayList<UrlListEntry>>();
+		urlTabs = new SparseArray<UrlTab>();
 		
 		setContentView(R.layout.activity_main);
 
@@ -170,8 +170,10 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		@Override
-		public Fragment getItem(int position) {
-			Fragment fragment = new UrlTab();
+		public UrlTab getItem(int position) {
+			Integer key = Integer.valueOf(position);
+			UrlTab fragment = new UrlTab();
+			urlTabs.put(key, fragment);
 			Bundle args = new Bundle();
 			args.putInt("position", position);
 			fragment.setArguments(args);
@@ -194,10 +196,11 @@ public class MainActivity extends FragmentActivity {
 		 * The fragment argument representing the section number for this
 		 * fragment.
 		 */
+		public UrlArrayAdapter arrayAdapter;
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState){
 			super.onActivityCreated(savedInstanceState);
-			UrlArrayAdapter arrayAdapter = new UrlArrayAdapter(getActivity(), this, R.layout.urllist_entry, new ArrayList<UrlListEntry>());
+			arrayAdapter = new UrlArrayAdapter(getActivity(), this, R.layout.urllist_entry, new ArrayList<UrlListEntry>());
 			setListAdapter(arrayAdapter);
 			int position = ((Integer) this.getArguments().get("position")).intValue();
 			String hostname = hostnames.get(position);
@@ -218,12 +221,12 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public void onCreateContextMenu(ContextMenu menu, View v,
 		    ContextMenuInfo menuInfo) {
-			Log.i("contextmenu", v.toString());
 			if (v.getId()==R.id.urlist_entry_layout) {
 				MenuItem copy = menu.add("copy");
 				ClipboardManager clipboard = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 				copy.setOnMenuItemClickListener(new OnCopyMenuItemClickListener(v, clipboard));
 				MenuItem delete = menu.add("delete");
+				delete.setOnMenuItemClickListener(new OnDeleteMenuItemClickListener((MainActivity) getActivity(), v));
 			}
 		}
 	}
@@ -250,8 +253,10 @@ class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
 			UrlListEntry entry = arrayList.get(position);
 			String url = entry.getUrl();
 			String created = entry.getCreated();
-			((TextView) view.findViewById(R.id.urlListEntryLink)).setText(url);
+			TextView linkView = (TextView) view.findViewById(R.id.urlListEntryLink);
+			linkView.setText(url);
 			((TextView) view.findViewById(R.id.urlListEntryCreatedDate)).setText(created);
+			view.setTag(entry);
 			fragment.registerForContextMenu(view);
 		}
 		return view;
