@@ -13,13 +13,13 @@ class RequestTokenTask extends AsyncTask<Void, Void, String>{
 	private String url;
 	private SharedPreferences sharedPrefs;
 	
-	public RequestTokenTask(MainActivity mainActivity){
+	public RequestTokenTask(MainActivity mainActivity, String password){
 		this.mainActivity = mainActivity;
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mainActivity);
 		String serverurl = sharedPrefs.getString("pref_serverurl", "");
 		String username = sharedPrefs.getString("pref_username", "");
 		String device = sharedPrefs.getString("pref_devicename", "");
-		this.url=serverurl + "?api=true&tokenrequest=true&user="+Uri.encode(username)+"&device="+Uri.encode(device);
+		this.url=serverurl + "?api=true&tokenrequest=true&user="+Uri.encode(username)+"&password="+Uri.encode(password)+"&device="+Uri.encode(device);
 	}
 	@Override
 	protected void onPreExecute() {

@@ -98,11 +98,10 @@ public class MainActivity extends FragmentActivity {
 	}
 	public void requestToken(){
 		if(!Util.hasSettingsErrors(this)){
-			new RequestTokenTask(this).execute();
+			(new EnterPasswordFragment()).show(getFragmentManager(), "AddUrlDialog");
 		}
 		
 	}
-
 	public void errorMessage(String errormessage){
 		TextView messageTextView =  (TextView) findViewById(R.id.messageTextView);
 		messageTextView.setText(errormessage);
