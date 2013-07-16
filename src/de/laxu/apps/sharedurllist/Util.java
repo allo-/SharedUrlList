@@ -44,7 +44,6 @@ public abstract class Util  {
 						int statusCode = statusLine.getStatusCode();
 			
 						if (statusCode == 200) {
-							MainActivity.hostnames = new ArrayList<String>();
 							BufferedReader reader = new BufferedReader(
 									new InputStreamReader(response.getEntity()
 											.getContent()));

@@ -58,6 +58,7 @@ class LoadUrlListTask extends AsyncTask<Void, Void, String> {
 				return "Server Error: " + errormessage;
 			}
 			JSONArray hosts = (json.getJSONArray("hosts"));
+			MainActivity.hostnames = new ArrayList<String>();
 			for (int i = 0; i < hosts.length(); i++) {
 				JSONObject host = hosts.getJSONObject(i);
 				String hostname = host.getString("hostname");
