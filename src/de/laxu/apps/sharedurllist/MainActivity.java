@@ -3,10 +3,15 @@ package de.laxu.apps.sharedurllist;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.content.ClipData;
+import de.laxu.apps.sharedurllist.listeners.OnAddUrlMenuItemClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnCopyMenuItemClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnRefreshMenuItemClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnRequestTokenMenuItemClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnSettingsButtonClickListener;
+import de.laxu.apps.sharedurllist.listeners.OnSettingsMenuItemClickListener;
+
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,13 +29,11 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -156,19 +159,6 @@ public class MainActivity extends FragmentActivity {
 		addUrlMenuItem.setOnMenuItemClickListener(new OnAddUrlMenuItemClickListener(this));
 		return true;
 	}
-	class OnAddUrlMenuItemClickListener implements OnMenuItemClickListener{
-		private final MainActivity mainActivity;
-		public OnAddUrlMenuItemClickListener(MainActivity mainActivity){
-			this.mainActivity = mainActivity;
-		}
-		@Override
-		public boolean onMenuItemClick(MenuItem item) {
-			mainActivity.startActivity(new Intent(mainActivity, AddUrlDialog.class));
-			return true;
-		}
-		
-	}
-
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.
@@ -236,21 +226,6 @@ public class MainActivity extends FragmentActivity {
 				MenuItem delete = menu.add("delete");
 			}
 		}
-	}
-}
-class OnCopyMenuItemClickListener implements OnMenuItemClickListener{
-		private View view;
-		private ClipboardManager clipboard;
-		public OnCopyMenuItemClickListener(View v, ClipboardManager clipboard){
-			this.view = v;
-			this.clipboard = clipboard;
-		}
-	@Override
-	public boolean onMenuItemClick(MenuItem item) {
-		ClipData clip = ClipData.newPlainText("url", ((TextView)this.view.findViewById(R.id.urlListEntryLink)).getText());
-		clipboard.setPrimaryClip(clip);
-		Toast.makeText(view.getContext(), "URL copied to clipboard.", Toast.LENGTH_SHORT).show();
-		return true;
 	}
 }
 class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
