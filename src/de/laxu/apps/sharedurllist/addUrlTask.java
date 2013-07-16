@@ -31,18 +31,18 @@ class addUrlTask extends AsyncTask<Void, Void, String>{
 		String json_input="";
 		try {
 			json_input = Util.loadFromURL(this.activity, this.requesturl);
+			try {
+				JSONObject json = new JSONObject(json_input);
+				if(json.getString("status").equals("success")){
+					return null;
+				}else{
+					return json.getString("errormessage");
+				}
+			} catch (JSONException e) {
+				return "JSON error";
+			}		
 		} catch (LoadException e) {
 			return e.getError();
-		}
-		try {
-			JSONObject json = new JSONObject(json_input);
-			if(json.getString("status").equals("success")){
-				return null;
-			}else{
-				return json.getString("errormessage");
-			}
-		} catch (JSONException e) {
-			return "JSON error";
 		}
 	}
 	@Override
