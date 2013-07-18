@@ -226,7 +226,7 @@ public class MainActivity extends FragmentActivity {
 				ClipboardManager clipboard = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 				copy.setOnMenuItemClickListener(new OnCopyMenuItemClickListener(v, clipboard));
 				MenuItem delete = menu.add("delete");
-				delete.setOnMenuItemClickListener(new OnDeleteMenuItemClickListener((MainActivity) getActivity(), v));
+				delete.setOnMenuItemClickListener(new OnDeleteMenuItemClickListener(v, (MainActivity) getActivity()));
 			}
 		}
 	}
@@ -256,7 +256,7 @@ class UrlArrayAdapter extends ArrayAdapter<UrlListEntry>{
 			TextView linkView = (TextView) view.findViewById(R.id.urlListEntryLink);
 			linkView.setText(url);
 			((TextView) view.findViewById(R.id.urlListEntryCreatedDate)).setText(created);
-			view.setTag(entry);
+			linkView.setTag(entry);
 			fragment.registerForContextMenu(view);
 		}
 		return view;
