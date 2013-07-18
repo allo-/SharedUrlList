@@ -57,7 +57,7 @@ public abstract class Util  {
 					} catch (MalformedURLException e) {
 						throw new LoadException("invalid URL");
 					} catch (IOException e) {
-						throw new LoadException("network Error");
+						throw new LoadException("network Error: "+e.toString());
 					}
 				} else {
 					throw new LoadException("no network");
@@ -93,10 +93,9 @@ public abstract class Util  {
 		if(devicename.equals("")){
 			errorItems.add("device name");
 		}
-		if(errorItems.size() >0)
+		if(errorItems.size() >0){
 			errorString += "No " + buildCommaList(errorItems) +" set.";
-		
-		if(!serverURL.startsWith("https://") && !serverURL.startsWith("http://")){
+		}else if(!serverURL.startsWith("https://") && !serverURL.startsWith("http://")){
 			if(!errorString.equals(""))
 				errorString += "\n";
 			errorString += "Server-URL does not start with \"https://\" or \"http://\".";
