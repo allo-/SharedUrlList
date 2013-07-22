@@ -52,35 +52,39 @@ class LoadUrlListTask extends AsyncTask<Void, Void, String> {
 		String json_input;
 		try{
 			json_input = Util.loadFromURL(mainActivity, url);
-			JSONObject json = new JSONObject(json_input);
-			if (!json.get("status").equals("success")) {
-				String errormessage = json.getString("errormessage");
-				return "Server Error: " + errormessage;
-			}
-			JSONArray hosts = (json.getJSONArray("hosts"));
-			MainActivity.hostnames = new ArrayList<String>();
-			for (int i = 0; i < hosts.length(); i++) {
-				JSONObject host = hosts.getJSONObject(i);
-				String hostname = host.getString("hostname");
-				MainActivity.hostnames.add(hostname);
-				JSONArray json_urls = host.getJSONArray("urls");
-				ArrayList<UrlListEntry> url_list = new ArrayList<UrlListEntry>();
-				for (int j = 0; j < json_urls.length(); j++) {
-					JSONObject json_url = (JSONObject) json_urls.get(j);
-					int id = json_url.getInt("id");
-					String link = json_url.getString("link");
-					String created = json_url.getString("created");
-					url_list.add(new UrlListEntry(id, link, created));
-				}
-				MainActivity.hostURLList.put(hostname, url_list);
-			}
-			java.util.Collections.sort(MainActivity.hostnames);
-			return null;
+			mainActivity.urllists_json = json_input; // cache the valid json.
+			return LoadUrlListTask.parse_urllists(json_input);
 		} catch (JSONException e) {
 			return "JSON Error";
 		}catch (LoadException e) {
 			return e.getError();
 		}
+	}
+	protected static String parse_urllists(String json_input) throws JSONException{
+		JSONObject json = new JSONObject(json_input);
+		if (!json.get("status").equals("success")) {
+			String errormessage = json.getString("errormessage");
+			return "Server Error: " + errormessage;
+		}
+		JSONArray hosts = (json.getJSONArray("hosts"));
+		MainActivity.hostnames = new ArrayList<String>();
+		for (int i = 0; i < hosts.length(); i++) {
+			JSONObject host = hosts.getJSONObject(i);
+			String hostname = host.getString("hostname");
+			MainActivity.hostnames.add(hostname);
+			JSONArray json_urls = host.getJSONArray("urls");
+			ArrayList<UrlListEntry> url_list = new ArrayList<UrlListEntry>();
+			for (int j = 0; j < json_urls.length(); j++) {
+				JSONObject json_url = (JSONObject) json_urls.get(j);
+				int id = json_url.getInt("id");
+				String link = json_url.getString("link");
+				String created = json_url.getString("created");
+				url_list.add(new UrlListEntry(id, link, created));
+			}
+			MainActivity.hostURLList.put(hostname, url_list);
+		}
+		java.util.Collections.sort(MainActivity.hostnames);
+		return null;
 	}
 
 	@Override

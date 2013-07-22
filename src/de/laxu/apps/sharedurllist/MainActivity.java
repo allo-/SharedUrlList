@@ -3,6 +3,8 @@ package de.laxu.apps.sharedurllist;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.json.JSONException;
+
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -50,6 +52,8 @@ public class MainActivity extends FragmentActivity {
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+
+	public String urllists_json = "";
 	
 	static HashMap<String, ArrayList<UrlListEntry>> hostURLList;
 	static ArrayList<String> hostnames;
@@ -63,6 +67,18 @@ public class MainActivity extends FragmentActivity {
 		hostURLList = new HashMap<String, ArrayList<UrlListEntry>>();
 		urlTabs = new SparseArray<UrlTab>();
 		
+		if(savedInstanceState != null && savedInstanceState.containsKey("urllists_json")){
+			try {
+				this.urllists_json = (String) savedInstanceState.get("urllists_json");
+				String error = LoadUrlListTask.parse_urllists(this.urllists_json);
+				if(error != null){
+					this.errorMessage(error);
+				}
+			} catch (JSONException e) {
+				// TODO how to restart with a fresh SectionPager?
+			}
+		}
+		
 		setContentView(R.layout.activity_main);
 
 		// Create the adapter that will return a fragment for each of the three
@@ -75,7 +91,12 @@ public class MainActivity extends FragmentActivity {
 		
 		Button settingsButton = (Button) findViewById(R.id.settingsButton);
 		settingsButton.setOnClickListener(new OnSettingsButtonClickListener(this));
-		updateLists();
+		if(this.urllists_json == null || this.urllists_json.equals("")){
+			updateLists();
+		}
+		if(savedInstanceState != null && this.mViewPager.getChildCount() >0){
+			this.mViewPager.setCurrentItem(savedInstanceState.getInt("viewPagerItem", 0));
+		}
 	}
 	
 	@Override
@@ -87,6 +108,12 @@ public class MainActivity extends FragmentActivity {
 		else
 			hideMessage();
 	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString("urllists_json", this.urllists_json);
+		outState.putInt("viewPagerItem", this.mViewPager.getCurrentItem());
+	};
 
 	public void updateLists(){
 		hostURLList = new HashMap<String, ArrayList<UrlListEntry>>();
