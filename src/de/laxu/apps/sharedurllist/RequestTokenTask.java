@@ -49,6 +49,7 @@ class RequestTokenTask extends AsyncTask<Void, Void, String>{
 	protected void onPostExecute(String errors) {
 		if(errors == null){
 			mainActivity.infoMessage("token created.");
+			mainActivity.updateLists();
 		}else{
 			mainActivity.errorMessage(errors);
 			
